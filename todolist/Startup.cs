@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -81,26 +78,9 @@ namespace todolist
             .AllowAnyHeader());
 
 
-            //app.UseCookiePolicy(new CookiePolicyOptions
-            //{
-            //    MinimumSameSitePolicy = SameSiteMode.Strict,
-            //    HttpOnly = HttpOnlyPolicy.Always,
-            //    Secure = CookieSecurePolicy.Always
-            //});
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
-            //Можно вынести в отдельную Middleware
-            //app.Use(async (context, next) =>
-            //{
-            //    var token = context.Request.Cookies[".AspNetCore.Application.Id"];
-            //    if (!string.IsNullOrEmpty(token))
-            //        context.Request.Headers.Add("Authorization", "Bearer " + token);
-
-            //    await next();
-            //});
 
             app.UseRouting();
             app.UseAuthentication();   // добавление middleware аутентификации 
@@ -112,6 +92,7 @@ namespace todolist
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
+            // app.UseMiddleware<JwtMiddleware>();
 
             app.UseSpa(spa =>
             {
