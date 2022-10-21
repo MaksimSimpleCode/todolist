@@ -8,9 +8,12 @@ function App() {
     const [isAuth, setIsAuth] = useState(false);
 
     useEffect(() => {
-        if (localStorage.getItem('auth')) {
+        //if (localStorage.getItem('auth')) {
+        //    setIsAuth(true)
+        //}
+
+        if (sessionStorage.getItem('accessToken'))
             setIsAuth(true)
-        }
     }, [])
 
 

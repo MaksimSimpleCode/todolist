@@ -31,8 +31,29 @@ namespace todolist.Controllers
             //По идее так получим имя
             var getCurrentUserName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
 
-            return Json(new { Data = "secret data...." });
+            return Json(new { Data = $"secret data....\nyou name is: {getCurrentUserName}" });
         }
+
+
+
+        [HttpGet]
+        [Authorize]
+        [Route("Todo")]
+        public JsonResult GetTodo()
+        {
+            var currentUser = User.Claims;
+            //По идее так получим имя
+            var getCurrentUserName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
+
+            var todoListMok = new List<Todo>() {
+                new Todo { Content = $"затестил fetch для пользователя {getCurrentUserName}", isDo = true },
+             new Todo { Content = $"и еще тест {getCurrentUserName}", isDo = false }
+            };
+
+            return Json(todoListMok);
+        }
+
+
 
 
         [HttpPost]
@@ -41,7 +62,8 @@ namespace todolist.Controllers
         {
             var people = new List<Person>
              {
-                new Person("tom@gmail.com", "12345")
+                new Person("tom@gmail.com", "12345"),
+                new Person("bob@gmail.com", "12345")
           };
             // находим пользователя 
             Person? person = people.FirstOrDefault(p => p.Email == loginData.Email && p.Password == loginData.Password);
@@ -77,5 +99,12 @@ namespace todolist.Controllers
             this.Email = Email;
             this.Password = Password;
         }
+    }
+
+    public class Todo
+    {
+        public string Content { get; set; }
+        public bool isDo { get; set; }
+
     }
 }

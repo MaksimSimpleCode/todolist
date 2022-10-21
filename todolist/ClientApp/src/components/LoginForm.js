@@ -43,7 +43,7 @@ const LoginForm = ({ saveTodo }) => {
             // сохраняем в хранилище sessionStorage токен доступа
             sessionStorage.setItem(tokenKey, data.access_token);
             setIsAuth(true);
-            localStorage.setItem('auth', 'true')
+            //localStorage.setItem('auth', 'true')
         }
         else  // если произошла ошибка, получаем код статуса
             console.log("Status: ", response.status);

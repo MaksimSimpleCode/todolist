@@ -12,6 +12,9 @@ export default initialValue => {
       const newTodos = todos.filter((_, index) => index !== todoIndex);
 
       setTodos(newTodos);
-    }
+      },
+      loadTodo: loadingTodos => {
+          setTodos(loadingTodos);
+      },
   };
 };

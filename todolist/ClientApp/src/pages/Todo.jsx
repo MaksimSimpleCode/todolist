@@ -10,20 +10,44 @@ import { useContext } from 'react';
 import { AuthContext } from '../context';
 
 const Todo = () => {
-    const { todos, addTodo, deleteTodo } = useTodoState([]);
+    const { todos, addTodo, deleteTodo, loadTodo } = useTodoState([]);
     const { isAuth, setIsAuth } = useContext(AuthContext)
     const logout = () => {
         var tokenKey = "accessToken"
         sessionStorage.removeItem(tokenKey);
 
         setIsAuth(false)
-        localStorage.removeItem('auth')
+      //  localStorage.removeItem('auth')
     }
 
     useEffect(() => {
-        /* fetchToDoList(userId);*/
+         fetchToDoList();
         //При входе на страничку должны загрузить todo пользователя
     }, [])
+    const fetchToDoList = async () => {
+        var tokenKey = "accessToken"
+        const token = sessionStorage.getItem(tokenKey);
+        const response = await fetch("WeatherForecast/Todo", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + token  
+            }
+        });
+       
+        if (response.status === 401) {
+            alert("Не авторизован!")
+        }
+        if (response.ok === true) {
+            const data = await response.json();
+            console.log(data);
+  
+            loadTodo(data);
+        }
+        else
+            console.log("Status: ", response.status);
+    }
+
 
     const getData = async () => {
         var tokenKey = "accessToken"

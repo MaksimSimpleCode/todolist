@@ -29,9 +29,7 @@ namespace todolist
             })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
-                ////Для https
-                //options.RequireHttpsMetadata = true;
-                //options.SaveToken = true;
+                //options.Authority = "https://localhost:5001/";
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     // указывает, будет ли валидироваться издатель при валидации токена
