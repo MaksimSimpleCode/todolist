@@ -14,29 +14,11 @@ namespace todolist.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : Controller
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
         private readonly ILogger<WeatherForecastController> _logger;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
-        }
-
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
         }
 
 
@@ -45,6 +27,10 @@ namespace todolist.Controllers
         [Route("Data")]
         public JsonResult Data()
         {
+            var currentUser = User.Claims;
+            //По идее так получим имя
+            var getCurrentUserName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
+
             return Json(new { Data = "secret data...." });
         }
 
@@ -53,11 +39,9 @@ namespace todolist.Controllers
         [Route("Login")]
         public IActionResult Login([FromBody] Person loginData)
         {
-          var  people = new List<Person>
+            var people = new List<Person>
              {
-                new Person("tom@gmail.com", "12345"),
-                new Person("bob@gmail.com", "55555")
-           
+                new Person("tom@gmail.com", "12345")
           };
             // находим пользователя 
             Person? person = people.FirstOrDefault(p => p.Email == loginData.Email && p.Password == loginData.Password);
