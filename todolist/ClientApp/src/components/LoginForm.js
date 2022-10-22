@@ -17,14 +17,13 @@ const LoginForm = ({ saveTodo }) => {
     const login = async (e) => {
         event.preventDefault();
         //TODO сделать нормальную валидацию. Возможно использовать Formik
-        if (email === null || password === null || email ===''|| password === '')
-        {
+        if (email === null || password === null || email === '' || password === '') {
             alert("поля не могут быть пустыми")
             return;
         }
         var tokenKey = "accessToken";
         // отправляет запрос и получаем ответ
-        const response = await fetch("/WeatherForecast/Login", {
+        const response = await fetch("/User/Login", {
             method: "POST",
             headers: { "Accept": "application/json", "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -50,28 +49,30 @@ const LoginForm = ({ saveTodo }) => {
     }
 
     return (
-        <form onSubmit={login}>
-            <div style={{ margin: 10 }}>
-                <TextField
-                    variant="outlined"
-                    label="Email"
-                    placeholder="email...."
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                />
-            </div>
-            <div style={{ margin: 10 }}>
-                <TextField
-                    variant="outlined"
-                    label="Password"
-                    placeholder="password...."
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                    type="password"
-                />
-            </div>
-            <Button variant="contained" type="submit">Login</Button>
-        </form>
+        <div className="App">
+            <form onSubmit={login}>
+                <div style={{ margin: 10 }}>
+                    <TextField
+                        variant="outlined"
+                        label="Email"
+                        placeholder="email...."
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}
+                    />
+                </div>
+                <div style={{ margin: 10 }}>
+                    <TextField
+                        variant="outlined"
+                        label="Password"
+                        placeholder="password...."
+                        onChange={(e) => setPassword(e.target.value)}
+                        value={password}
+                        type="password"
+                    />
+                </div>
+                <Button variant="contained" type="submit">Login</Button>
+            </form>
+        </div>
     );
 };
 

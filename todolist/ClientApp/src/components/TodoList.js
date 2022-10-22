@@ -6,27 +6,34 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { useContext } from 'react';
 
-const TodoList = ({ todos, deleteTodo }) => (
-  <List>
-    {todos.map((todo, index) => (
-        <ListItem key={index.toString()} dense button>
+const TodoList = ({ todos, deleteTodo }) => {
 
-            <Checkbox tabIndex={-1} checked={todo.isDo} />
-        <ListItemText primary={todo.content} />
-        <ListItemSecondaryAction>
-          <IconButton
-            aria-label="Delete"
-            onClick={() => {
-              deleteTodo(index);
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
-    ))}
-  </List>
-);
+    const [checked, setChecked] = useContext(false);
+
+
+    return (
+        <List>
+            {todos.map((todo, index) => (
+                <ListItem key={index.toString()} dense button>
+
+                    <Checkbox tabIndex={-1} checked={todo.isDo} />
+                    <ListItemText primary={todo.content} />
+                    <ListItemSecondaryAction>
+                        <IconButton
+                            aria-label="Delete"
+                            onClick={() => {
+                                deleteTodo(index);
+                            }}
+                        >
+                            <DeleteIcon />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+            ))}
+        </List>
+    );
+}
 
 export default TodoList;

@@ -27,7 +27,7 @@ const Todo = () => {
     const fetchToDoList = async () => {
         var tokenKey = "accessToken"
         const token = sessionStorage.getItem(tokenKey);
-        const response = await fetch("WeatherForecast/Todo", {
+        const response = await fetch("User/Todo", {
             method: "GET",
             headers: {
                 "Accept": "application/json",
@@ -52,7 +52,7 @@ const Todo = () => {
     const getData = async () => {
         var tokenKey = "accessToken"
         const token = sessionStorage.getItem(tokenKey);
-        const response = await fetch("WeatherForecast/Data", {
+        const response = await fetch("User/Data", {
             method: "GET",
             headers: {
                 "Accept": "application/json",

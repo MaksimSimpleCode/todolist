@@ -12,11 +12,11 @@ namespace todolist.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : Controller
+    public class UserController : Controller
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<UserController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public UserController(ILogger<UserController> logger)
         {
             _logger = logger;
         }
