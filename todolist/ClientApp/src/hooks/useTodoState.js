@@ -16,8 +16,9 @@ export default initialValue => {
         },
         changeTodo: todoIndex => {
             const modifiedTodo = todos.filter((_, index) => index === todoIndex)[0];
-            modifiedTodo.isDo = !modifiedTodo.isDo
+            modifiedTodo.isDone = !modifiedTodo.isDone
             setTodos([...todos]);
+            changeTodo(modifiedTodo);
             //Шлем fetch в базу
         },
         loadTodo: loadingTodos => {
@@ -25,3 +26,29 @@ export default initialValue => {
         },
     };
 };
+
+const changeTodo = async (modifiedTodo) => {
+    var tokenKey = "accessToken"
+    const token = sessionStorage.getItem(tokenKey);
+    const response = await fetch("Todo/Change", {
+        method: "POST",
+        headers: {
+            "Accept": "application/json", "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({
+            id: modifiedTodo.id,
+            Content: modifiedTodo.content,
+            isDone: modifiedTodo.isDone
+        })
+    });
+
+    if (response.status === 401) {
+        alert("Не авторизован!")
+    }
+    if (response.ok === true) {
+        const data = await response.json();
+    }
+    else
+        console.log("Status: ", response.status);
+}

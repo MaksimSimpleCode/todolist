@@ -46,5 +46,23 @@ namespace todolist.Controllers
 
             return Ok();
         }
+        [HttpPost]
+        [Authorize]
+        [Route("Change")]
+        public async Task<IActionResult> Change([FromBody] Todo todo)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var updateTodo = _db.Todos.FirstOrDefault(t => t.Id == todo.Id);
+            updateTodo.Content = todo.Content;
+            updateTodo.isDone = todo.isDone;
+            if (updateTodo != null)
+            {
+                _db.Todos.Update(updateTodo);
+               await _db.SaveChangesAsync();
+            }
+            
+
+            return Ok();
+        }
     }
 }
