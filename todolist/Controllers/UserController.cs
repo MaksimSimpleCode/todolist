@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using todolist.DB;
+using todolist.Entities;
 
 namespace todolist.Controllers
 {
@@ -15,62 +17,26 @@ namespace todolist.Controllers
     public class UserController : Controller
     {
         private readonly ILogger<UserController> _logger;
-
-        public UserController(ILogger<UserController> logger)
+        private readonly ApplicationContext _db;
+        public UserController(ApplicationContext db, ILogger<UserController> logger)
         {
+            _db = db;
             _logger = logger;
         }
 
-
-        [HttpGet]
-        [Authorize]
-        [Route("Data")]
-        public JsonResult Data()
-        {
-            var currentUser = User.Claims;
-            //По идее так получим имя
-            var getCurrentUserName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
-
-            return Json(new { Data = $"secret data....\nyou name is: {getCurrentUserName}" });
-        }
-
-
-
-        [HttpGet]
-        [Authorize]
-        [Route("Todo")]
-        public JsonResult GetTodo()
-        {
-            var currentUser = User.Claims;
-            //По идее так получим имя
-            var getCurrentUserName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
-
-            var todoListMok = new List<Todo>() {
-                new Todo { Content = $"затестил fetch для пользователя {getCurrentUserName}", isDo = true },
-             new Todo { Content = $"и еще тест {getCurrentUserName}", isDo = false }
-            };
-
-            return Json(todoListMok);
-        }
-
-
-
-
         [HttpPost]
         [Route("Login")]
-        public IActionResult Login([FromBody] Person loginData)
+        public IActionResult Login([FromBody] User loginData)
         {
-            var people = new List<Person>
-             {
-                new Person("tom@gmail.com", "12345"),
-                new Person("bob@gmail.com", "12345")
-          };
-            // находим пользователя 
-            Person? person = people.FirstOrDefault(p => p.Email == loginData.Email && p.Password == loginData.Password);
-            // если пользователь не найден, отправляем статусный код 401
-            if (person is null) return Unauthorized("Не авторизован");
 
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, person.Email) };
+            User? user = _db.Users.FirstOrDefault(p => p.Email == loginData.Email && p.Password == loginData.Password);
+            // если пользователь не найден, отправляем статусный код 401
+            if (user is null) return Unauthorized("Не авторизован");
+
+            var claims = new List<Claim> {
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString())
+            };
             // создаем JWT-токен
             var jwt = new JwtSecurityToken(
                     issuer: AuthOptions.ISSUER,
@@ -84,27 +50,10 @@ namespace todolist.Controllers
             var response = new
             {
                 access_token = encodedJwt,
-                username = person.Email
+                username = user.Email
             };
 
             return Json(response);
         }
-    }
-    public class Person
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public Person(string Email, string Password)
-        {
-            this.Email = Email;
-            this.Password = Password;
-        }
-    }
-
-    public class Todo
-    {
-        public string Content { get; set; }
-        public bool isDo { get; set; }
-
     }
 }

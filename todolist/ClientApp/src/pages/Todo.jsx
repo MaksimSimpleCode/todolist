@@ -8,75 +8,54 @@ import Button from '@material-ui/core/Button';
 import '../styles.css';
 import { useContext } from 'react';
 import { AuthContext } from '../context';
+import { fetchToDoList } from '../API/api';
+
 
 const Todo = () => {
-    const { todos, addTodo, deleteTodo, loadTodo } = useTodoState([]);
+    const { todos, addTodo, deleteTodo, loadTodo, changeTodo } = useTodoState([]);
     const { isAuth, setIsAuth } = useContext(AuthContext)
+
     const logout = () => {
         var tokenKey = "accessToken"
         sessionStorage.removeItem(tokenKey);
 
         setIsAuth(false)
-      //  localStorage.removeItem('auth')
+        //  localStorage.removeItem('auth')
     }
 
     useEffect(() => {
-         fetchToDoList();
-        //При входе на страничку должны загрузить todo пользователя
+       fetchToDoList();
+
     }, [])
-    const fetchToDoList = async () => {
+
+     const fetchToDoList = async () => {
         var tokenKey = "accessToken"
         const token = sessionStorage.getItem(tokenKey);
-        const response = await fetch("User/Todo", {
+        const response = await fetch("Todo/GetTodo", {
             method: "GET",
             headers: {
                 "Accept": "application/json",
-                "Authorization": "Bearer " + token  
+                "Authorization": "Bearer " + token
             }
         });
-       
+
         if (response.status === 401) {
             alert("Не авторизован!")
         }
         if (response.ok === true) {
             const data = await response.json();
             console.log(data);
-  
             loadTodo(data);
         }
         else
             console.log("Status: ", response.status);
     }
 
-
-    const getData = async () => {
-        var tokenKey = "accessToken"
-        const token = sessionStorage.getItem(tokenKey);
-        const response = await fetch("User/Data", {
-            method: "GET",
-            headers: {
-                "Accept": "application/json",
-                "Authorization": "Bearer " + token  // передача токена в заголовке
-            }
-        });
-
-        if (response.status === 401) {
-            alert("Не авторизован!")
-        }
-        if (response.ok === true) {
-            const data = await response.json();
-            alert(data.data);
-        }
-        else
-            console.log("Status: ", response.status);
-    };
-
     return (
         <div className="App">
             <Typography component="h1" variant="h2">
                 Todos
             </Typography>
-
 
             <TodoForm
                 saveTodo={todoText => {
@@ -85,13 +64,10 @@ const Todo = () => {
                     if (trimmedText.length > 0) {
                         addTodo(trimmedText);
                     }
-                }}/>
+                }} />
 
-            <TodoList todos={todos} deleteTodo={deleteTodo} />
+            <TodoList todos={todos} deleteTodo={deleteTodo} changeTodo={changeTodo} />
             <Button variant="outlined" color="secondary" onClick={logout}> Выйти </Button>
-            <Button variant="outlined" color="secondary" onClick={getData}> Получить данные </Button>
-
-
         </div>
     );
 };

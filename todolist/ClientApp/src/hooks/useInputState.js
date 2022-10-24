@@ -5,7 +5,7 @@ export default () => {
 
   return {
     value,
-    onChange: event => {
+      onChange: event => {
       setValue(event.target.value);
     },
     reset: () => setValue('')

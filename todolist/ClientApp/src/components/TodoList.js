@@ -8,9 +8,8 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useContext } from 'react';
 
-const TodoList = ({ todos, deleteTodo }) => {
+const TodoList = ({ todos, deleteTodo, changeTodo }) => {
 
-    const [checked, setChecked] = useContext(false);
 
 
     return (
@@ -18,7 +17,7 @@ const TodoList = ({ todos, deleteTodo }) => {
             {todos.map((todo, index) => (
                 <ListItem key={index.toString()} dense button>
 
-                    <Checkbox tabIndex={-1} checked={todo.isDo} />
+                    <Checkbox tabIndex={-1} checked={todo.isDone} onChange={() => changeTodo(index)} disableRipple />
                     <ListItemText primary={todo.content} />
                     <ListItemSecondaryAction>
                         <IconButton

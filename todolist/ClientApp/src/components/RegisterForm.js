@@ -6,34 +6,36 @@ import { useContext, useState } from "react";
 
 
 
-const LoginForm = ({ saveTodo }) => {
+const RegisterForm = ({ saveTodo }) => {
 
     //const { emailValue, resetEmail, onChangeEmail } = useInputState();
     //const { passwordValue, resetPassword, onChangePassword } = useInputState();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
     const { isAuth, setIsAuth } = useContext(AuthContext)
 
 
-    const login = async (e) => {
+    const register = async (e) => {
         event.preventDefault();
         //TODO сделать нормальную валидацию. Возможно использовать Formik
-        if (email === null || password === null || email === '' || password === '') {
+        if (email === null || password === null || email === '' || password === '' || name === '' || name === null) {
             alert("поля не могут быть пустыми")
             return;
         }
         var tokenKey = "accessToken";
         // отправляет запрос и получаем ответ
-        const response = await fetch("/User/Login", {
+        const response = await fetch("/User/registration", {
             method: "POST",
             headers: { "Accept": "application/json", "Content-Type": "application/json" },
             body: JSON.stringify({
                 email: email,
+                name: name,
                 password: password
             })
         });
         if (response.status === 401) {
-            alert("Не верный логин или пароль!")
+            alert("401")
         }
         // если запрос прошел нормально
         if (response.ok === true) {
@@ -51,7 +53,16 @@ const LoginForm = ({ saveTodo }) => {
 
     return (
         <div className="App">
-            <form onSubmit={login}>
+            <form onSubmit={register}>
+                <div style={{ margin: 10 }}>
+                    <TextField
+                        variant="outlined"
+                        label="Name"
+                        placeholder="name...."
+                        onChange={(e) => setName(e.target.value)}
+                        value={name}
+                    />
+                </div>
                 <div style={{ margin: 10 }}>
                     <TextField
                         variant="outlined"
@@ -71,10 +82,10 @@ const LoginForm = ({ saveTodo }) => {
                         type="password"
                     />
                 </div>
-                <Button variant="contained" type="submit">Login</Button>
+                <Button variant="contained" type="submit">Register</Button>
             </form>
         </div>
     );
 };
 
-export default LoginForm;
+export default RegisterForm;

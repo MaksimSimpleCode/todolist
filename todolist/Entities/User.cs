@@ -7,9 +7,14 @@ namespace todolist.Entities
 {
     public class User
     {
+        public User()
+        {
+            Todos = new List<Todo>();
+        }
         public int Id { get; set; }
-        public int Email { get; set; }
-        public int Password { get; set; }
-        public int Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string Name { get; set; }
+        public ICollection<Todo> Todos { get; set; }
     }
 }
