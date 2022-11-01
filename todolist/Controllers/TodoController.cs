@@ -37,15 +37,19 @@ namespace todolist.Controllers
         [HttpPost]
         [Authorize]
         [Route("Create")]
-        public async Task<IActionResult> Create(string content)
+        public  JsonResult Create([FromBody] Todo todo)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             var user = _db.Users.FirstOrDefault(u => u.Id == Int32.Parse(userId));
-            user.Todos.Add(new Todo { Content = content, isDone = false });
-            await _db.SaveChangesAsync();
 
-            return Ok();
+            var newTodo = new Todo { Content = todo.Content, isDone = todo.isDone,User=user };
+            _db.Todos.Add(newTodo);
+            _db.SaveChanges();
+          
+
+            return Json(newTodo.Id);
         }
+
         [HttpPost]
         [Authorize]
         [Route("Change")]
@@ -53,16 +57,30 @@ namespace todolist.Controllers
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             var updateTodo = _db.Todos.FirstOrDefault(t => t.Id == todo.Id);
-            updateTodo.Content = todo.Content;
-            updateTodo.isDone = todo.isDone;
+           
             if (updateTodo != null)
             {
+                updateTodo.Content = todo.Content;
+                updateTodo.isDone = todo.isDone;
                 _db.Todos.Update(updateTodo);
                await _db.SaveChangesAsync();
+                return Ok();
             }
-            
+            return NotFound();
+        }
 
-            return Ok();
+        [HttpPost]
+        [Authorize]
+        [Route("Delete")]
+        public async Task<IActionResult>  Delete([FromBody] Todo todo)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var user = _db.Users.FirstOrDefault(u => u.Id == Int32.Parse(userId));
+
+            var deleteTodo = _db.Todos.FirstOrDefault(t => t.Id ==todo.Id);
+            _db.Todos.Remove(deleteTodo);
+            await _db.SaveChangesAsync();
+            return Ok(deleteTodo.Id);
         }
     }
 }

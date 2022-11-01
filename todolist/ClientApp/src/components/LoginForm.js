@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import useInputState from '../hooks/useInputState';
 import { AuthContext } from "../context";
 import { useContext, useState } from "react";
+import { NavLink } from 'react-router-dom';
 
 
 
@@ -72,7 +73,11 @@ const LoginForm = ({ saveTodo }) => {
                     />
                 </div>
                 <Button variant="contained" type="submit">Login</Button>
+                
             </form>
+            <div style={{ margin: 10 }}>
+                <Button variant="contained" ><NavLink to={"/register"}>Register</NavLink></Button>
+            </div>
         </div>
     );
 };

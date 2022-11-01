@@ -27,18 +27,18 @@ namespace todolist.Controllers
 
             return Ok(response);
         }
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(UserModel userModel)
-        {
-            var response = await _userService.Register(userModel);
+        //[HttpPost("register")]
+        //public async Task<IActionResult> Register(UserModel userModel)
+        //{
+        //    var response = await _userService.Register(userModel);
 
-            if (response == null)
-            {
-                return BadRequest(new { message = "Didn't register!" });
-            }
+        //    if (response == null)
+        //    {
+        //        return BadRequest(new { message = "Didn't register!" });
+        //    }
 
-            return Ok(response);
-        }
+        //    return Ok(response);
+        //}
 
 
         [HttpGet]

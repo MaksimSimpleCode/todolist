@@ -23,7 +23,7 @@ const TodoList = ({ todos, deleteTodo, changeTodo }) => {
                         <IconButton
                             aria-label="Delete"
                             onClick={() => {
-                                deleteTodo(index);
+                                deleteTodo(todo.id);
                             }}
                         >
                             <DeleteIcon />

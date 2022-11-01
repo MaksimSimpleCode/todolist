@@ -55,5 +55,42 @@ namespace todolist.Controllers
 
             return Json(response);
         }
+        [HttpPost]
+        [Route("Register")]
+        public IActionResult Register([FromBody] User registerData)
+        {
+
+            User? newUser = new User
+            {
+                Email = registerData.Email,
+                Password = registerData.Password,
+                Name = registerData.Name
+            };
+
+            var user = _db.Users.Add(newUser);
+            _db.SaveChanges();
+
+            var claims = new List<Claim> {
+                new Claim(ClaimTypes.Name, newUser.Email),
+                new Claim(ClaimTypes.NameIdentifier,newUser.Id.ToString())
+            };
+            // создаем JWT-токен
+            var jwt = new JwtSecurityToken(
+                    issuer: AuthOptions.ISSUER,
+                    audience: AuthOptions.AUDIENCE,
+                    claims: claims,
+                    expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            // формируем ответ
+            var response = new
+            {
+                access_token = encodedJwt,
+                username = newUser.Email
+            };
+
+            return Json(response);
+        }
     }
 }

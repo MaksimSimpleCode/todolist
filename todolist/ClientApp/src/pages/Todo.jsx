@@ -25,7 +25,6 @@ const Todo = () => {
 
     useEffect(() => {
        fetchToDoList();
-
     }, [])
 
      const fetchToDoList = async () => {
@@ -35,7 +34,7 @@ const Todo = () => {
             method: "GET",
             headers: {
                 "Accept": "application/json",
-                "Authorization": "Bearer " + tokenn
+                "Authorization": "Bearer " + token
             }
         });
 

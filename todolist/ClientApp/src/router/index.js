@@ -1,4 +1,5 @@
 ﻿import LoginForm from "../components/LoginForm"
+import RegisterForm from "../components/RegisterForm"
 import Todo from "../pages/Todo"
 
 
@@ -10,6 +11,7 @@ export const privateRoutes = [
 
 export const publicRoutes = [
     { path: '/login', component: <LoginForm />, exact: true },
+    { path: '/register', component: <RegisterForm />, exact: true },
     { path: '/*', component: <LoginForm />, exact: true },
 
 ]

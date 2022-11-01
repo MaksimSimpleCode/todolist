@@ -25,7 +25,7 @@ const RegisterForm = ({ saveTodo }) => {
         }
         var tokenKey = "accessToken";
         // отправляет запрос и получаем ответ
-        const response = await fetch("/User/registration", {
+        const response = await fetch("/User/Register", {
             method: "POST",
             headers: { "Accept": "application/json", "Content-Type": "application/json" },
             body: JSON.stringify({
